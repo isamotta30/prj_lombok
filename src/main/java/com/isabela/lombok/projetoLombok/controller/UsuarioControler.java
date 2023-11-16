@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isabela.lombok.projetoLombok.entities.Usuario;
 import com.isabela.lombok.projetoLombok.services.UsuarioService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Usuarios", description = "API REST DE GERENCIAMENTO DE USÚARIOS")
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioControler {
@@ -30,6 +33,7 @@ public class UsuarioControler {
 	}
 
 	@GetMapping("/{id}")
+	@Operation(summary = "Localiza usuário por ID")
 	public ResponseEntity<Usuario> findUsuariobyId(@PathVariable Long id) {
 		Usuario usuario = usuarioService.findUsuarioById(id);
 		if (usuario != null) {
@@ -40,18 +44,21 @@ public class UsuarioControler {
 	}
 
 	@GetMapping
+	@Operation (summary = "Apresenta todos os usuários ")
 	public ResponseEntity<List<Usuario>> findAllUsuarioscontrol() {
 		List<Usuario> usuarios = usuarioService.findAllUsuario();
 		return ResponseEntity.ok(usuarios);
 	}
 
-	@PostMapping
+	@PostMapping("/")
+	@Operation(summary = "Cadastra um usuário")
 	public ResponseEntity<Usuario> insertUsuariosControl(@RequestBody @Valid Usuario usuario) {
 		Usuario novoUsuario = usuarioService.insertUsuario(usuario);
 		return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
 	}
 
 	@PutMapping("/id")
+	@Operation( summary = "Altera um usuário")
 	public ResponseEntity<Usuario> updateUsuarioControl(@PathVariable Long id, @RequestBody @Valid Usuario usuario) {
 		Usuario mudausuario = usuarioService.updateUsuario(id, usuario);
 		if (mudausuario != null) {
@@ -62,6 +69,7 @@ public class UsuarioControler {
 	}
 
 	@DeleteMapping("/id")
+	@Operation(summary = "Exclui um usuário")
 	public ResponseEntity<String> deleteUsuarioControl(@PathVariable Long id) {
 		boolean remover = usuarioService.deleteUsuario(id);
 		if (remover) {
